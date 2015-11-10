@@ -96,24 +96,33 @@ gulp.task('styles', function(){
       .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('js', function(){
-  gulp.src(['src/scripts/*.js', 'src/templates/*.html'])
-      .pipe($.if('*.html', $.minifyHtml(minifyHtmlOptions)))
-      .pipe($.if('*.html', $.angularTemplatecache(name + '.tpl.js', templateOptions)))
-      .pipe($.sourcemaps.init())
-      .pipe($.if('*.js', $.replace('<<adfVersion>>', pkg.version)))
-      .pipe($.if('*.js', $.replace(/'use strict';/g, '')))
-      .pipe($.concat(name + '.js'))
-      .pipe($.headerfooter('(function(window, undefined) {\'use strict\';\n', '})(window);'))
-      .pipe($.ngAnnotate(annotateOptions))
-      .pipe(gulp.dest('dist/'))
-      .pipe($.rename(name + '.min.js'))
-      .pipe($.uglify())
-      .pipe($.sourcemaps.write('.'))
-      .pipe(gulp.dest('dist/'));
+function jsTask(specificTemplates, excludedJs, buildName) {
+  var distFileName = name + buildName;
+  gulp.src(['src/scripts/*.js', '!'+excludedJs, specificTemplates, 'src/templates/*.html'])
+    .pipe($.if('*.html', $.minifyHtml(minifyHtmlOptions)))
+    .pipe($.if('*.html', $.angularTemplatecache(name + '.tpl.js', templateOptions)))
+    .pipe($.sourcemaps.init())
+    .pipe($.if('*.js', $.replace('<<adfVersion>>', pkg.version)))
+    .pipe($.if('*.js', $.replace(/'use strict';/g, '')))
+    .pipe($.concat(distFileName + '.js'))
+    .pipe($.headerfooter('(function(window, undefined) {\'use strict\';\n', '})(window);'))
+    .pipe($.ngAnnotate(annotateOptions))
+    .pipe(gulp.dest('dist/'))
+    .pipe($.rename(distFileName + '.min.js'))
+    .pipe($.uglify())
+    .pipe($.sourcemaps.write('.'))
+    .pipe(gulp.dest('dist/'));
+}
+
+gulp.task('js-uib', function(){
+  jsTask('src/templates/uib/*.html', 'src/scripts/modal-proxy-strap.js', '');
 });
 
-gulp.task('build', ['styles', 'js']);
+gulp.task('js-strap', function(){
+  jsTask('src/templates/strap/*.html', 'src/scripts/modal-proxy-uib.js', '-angular-strap');
+});
+
+gulp.task('build', ['styles', 'js-strap', 'js-uib']);
 
 /** build docs **/
 
@@ -156,7 +165,7 @@ gulp.task('dashboard-templates', function(){
     root: '../src/templates',
     module: 'adf'
   };
-  return gulp.src('src/templates/*.html')
+  return gulp.src(['src/templates/*.html'])
              .pipe($.minifyHtml(minifyHtmlOptions))
              .pipe($.angularTemplatecache('adf.js', opts))
              .pipe(gulp.dest('.tmp'));

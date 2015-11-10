@@ -47,7 +47,7 @@
  */
 
 angular.module('adf')
-  .directive('adfDashboard', function ($rootScope, $log, $timeout, $uibModal, dashboard, adfTemplatePath) {
+  .directive('adfDashboard', function ($rootScope, $log, $timeout, ModalProxy, dashboard, adfTemplatePath) {
     'use strict';
 
     function stringToBoolean(string){
@@ -327,7 +327,7 @@ angular.module('adf')
           if(model.editTemplateUrl) {
             adfEditTemplatePath = model.editTemplateUrl;
           }
-          var instance = $uibModal.open({
+          var instance = ModalProxy.open({
             scope: editDashboardScope,
             templateUrl: adfEditTemplatePath,
             backdrop: 'static'
@@ -373,7 +373,7 @@ angular.module('adf')
             backdrop: 'static'
           };
 
-          var instance = $uibModal.open(opts);
+          var instance = ModalProxy.open(opts);
           addScope.addWidget = function(widget){
             var w = {
               type: widget,
