@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('adf').service('ModalProxy', function ($modal) {
+angular.module('adf.modal', ['mgcrea.ngStrap']).service('ModalProxy', function ($modal) {
   return {
      open: function(config) {
        config.template = config.templateUrl;
