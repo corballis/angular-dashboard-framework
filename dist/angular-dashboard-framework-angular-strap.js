@@ -647,6 +647,8 @@ angular.module('adf')
 angular.module('adf').service('ModalProxy', ["$modal", function ($modal) {
   return {
      open: function(config) {
+       config.template = config.templateUrl;
+       delete config.templateUrl;
        var modal = $modal(config);
        return {
          close: function() {
