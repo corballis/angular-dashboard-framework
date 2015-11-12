@@ -1277,7 +1277,7 @@ angular.module('adf')
             backdrop: 'static'
           };
 
-          editScope.$broadcast('beforeWidgetEdit');
+          scope.$broadcast('beforeWidgetEdit');
           var instance = ModalProxy.open(opts);
           editScope.closeDialog = function() {
             instance.close();
