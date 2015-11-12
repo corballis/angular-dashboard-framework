@@ -1256,6 +1256,7 @@ angular.module('adf')
 
         // bind edit function
         $scope.edit = function() {
+          $scope.$broadcast('beforeWidgetEdit');
           var editScope = $scope.$new();
           editScope.definition = angular.copy(definition);
 
@@ -1270,7 +1271,6 @@ angular.module('adf')
             backdrop: 'static'
           };
 
-          scope.$broadcast('beforeWidgetEdit');
           var instance = ModalProxy.open(opts);
           editScope.closeDialog = function() {
             instance.close();
@@ -1279,6 +1279,7 @@ angular.module('adf')
           editScope.saveDialog = function() {
             definition.title = editScope.definition.title;
             angular.extend(definition.config, editScope.definition.config);
+            $scope.$broadcast('afterWidgetEdit');
             var widget = $scope.widget;
             if (widget.edit && widget.edit.reload) {
                 // reload content after edit dialog is closed
