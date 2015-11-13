@@ -155,6 +155,7 @@ angular.module('adf')
 
           var instance = ModalProxy.open(opts);
           editScope.closeDialog = function() {
+            $scope.$broadcast('widgetEditClosed');
             instance.close();
             editScope.$destroy();
           };
