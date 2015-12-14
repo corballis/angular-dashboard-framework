@@ -167,6 +167,7 @@ angular.module('adf')
             if (widget.edit && widget.edit.reload) {
                 // reload content after edit dialog is closed
                 $scope.$broadcast('widgetConfigChanged');
+                $rootScope.$broadcast('widgetConfigChanged');
             }
             editScope.closeDialog();
           };
