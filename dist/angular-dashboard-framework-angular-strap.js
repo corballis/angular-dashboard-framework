@@ -25,7 +25,7 @@
 
 
 
-angular.module('adf', ['adf.provider', 'adf.modal'])
+angular.module('adf', ['adf.provider', 'adf.modal', 'pascalprecht.translate'])
   .value('adfTemplatePath', '../src/templates/')
   .value('rowTemplate', '<adf-dashboard-row row="row" adf-model="adfModel" options="options" edit-mode="editMode" ng-repeat="row in column.rows" />')
   .value('columnTemplate', '<adf-dashboard-column column="column" adf-model="adfModel" options="options" edit-mode="editMode" ng-repeat="column in row.columns" />')
@@ -1150,7 +1150,7 @@ angular.module('adf')
 
 
 angular.module('adf')
-  .directive('adfWidget', ["$log", "ModalProxy", "$rootScope", "dashboard", "adfTemplatePath", function($log, ModalProxy, $rootScope, dashboard, adfTemplatePath) {
+  .directive('adfWidget', ["$log", "ModalProxy", "$rootScope", "dashboard", "adfTemplatePath", "$translate", function($log, ModalProxy, $rootScope, dashboard, adfTemplatePath, $translate) {
 
     function preLink($scope) {
       var definition = $scope.definition;
@@ -1159,7 +1159,7 @@ angular.module('adf')
         if (w) {
           // pass title
           if (!definition.title) {
-            definition.title = w.title;
+            definition.title = $translate.instant(w.title);
           }
 
           if (!definition.titleTemplateUrl) {

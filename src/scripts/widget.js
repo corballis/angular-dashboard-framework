@@ -25,7 +25,7 @@
 'use strict';
 
 angular.module('adf')
-  .directive('adfWidget', function($log, ModalProxy, $rootScope, dashboard, adfTemplatePath) {
+  .directive('adfWidget', function($log, ModalProxy, $rootScope, dashboard, adfTemplatePath, $translate) {
 
     function preLink($scope) {
       var definition = $scope.definition;
@@ -34,7 +34,7 @@ angular.module('adf')
         if (w) {
           // pass title
           if (!definition.title) {
-            definition.title = w.title;
+            definition.title = $translate.instant(w.title);
           }
 
           if (!definition.titleTemplateUrl) {
